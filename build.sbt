@@ -1,4 +1,4 @@
-name := "cats-temper"
+name := "wildcat"
 
 version := "0.1"
 

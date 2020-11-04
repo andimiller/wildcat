@@ -4,13 +4,13 @@ import cats.effect.{ExitCode, IO, IOApp}
 import cats.implicits._
 import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
-import net.andimiller.cats.temper._
 import scalacache.serialization.circe._
 import scalacache.caffeine._
 import scalacache.CatsEffect.modes._
 import scala.concurrent.duration._
 
 import scala.util.control.NoStackTrace
+import net.andimiller.wildcat.syntax._
 
 object Example extends IOApp {
   def print(a: Any): IO[Unit] = IO { println(a) }
@@ -34,7 +34,7 @@ object Example extends IOApp {
         case true => IO { true }
         case false =>  IO.raiseError(new Throwable("oh no") with NoStackTrace)
       }
-    }.temperAs["foo"](cache, ttl = 5.seconds)
+    }.resilienceCacheNamed["foo"](cache, ttl = 5.seconds)
     _ <- f("hello").flatTap(print)
     _ <- f("hello").flatTap(print)
     _ <- IO.sleep(6.seconds)
